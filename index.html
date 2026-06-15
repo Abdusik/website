@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApiNet 2.0 | Цифровая Экосистема Пчеловодства КБР</title>
+    <style>
+        :root {
+            --primary: #f6c90e; /* Медовый желтый */
+            --secondary: #2c3e50; /* Темно-синий */
+            --accent: #27ae60; /* Зеленый агро */
+            --light: #f9fbfd;
+            --text: #333;
+            --gradient-blue: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-pink: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-cyan: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-orange: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-purple: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            --gradient-soft: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text);
+            background-color: #f4f6f8;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .btn-login {
+            background-color: var(--secondary);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1587049352846-4a222e784d38?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .hero h1 { font-size: 3em; margin-bottom: 10px; }
+        .hero p { font-size: 1.2em; max-width: 700px; margin: 0 auto 30px; }
+
+        .cta-buttons .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            margin: 10px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary { background-color: var(--primary); color: var(--secondary); }
+        .btn-secondary { background-color: white; color: var(--secondary); }
+        .btn:hover { transform: scale(1.05); }
+
+        /* Navigation Menu Section (NEW) */
+        .nav-menu-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 30px auto;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .nav-menu-section h2 {
+            color: var(--secondary);
+            margin-bottom: 25px;
+        }
+
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav-link-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: var(--primary);
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .nav-link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            background: #e5b90d;
+        }
+
+        /* Info Blocks (Dynamic) */
+        .info-block {
+            display: none; /* Hidden by default */
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px auto;
+            max-width: 1100px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            color: white;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-block h3 { margin-top: 0; font-size: 1.8em; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px; display: inline-block;}
+        .info-block p { font-size: 1.1em; line-height: 1.8; }
+        .info-block ul { list-style-type: none; padding: 0; }
+        .info-block li { margin-bottom: 8px; font-size: 1.05em; }
+        .info-block strong { font-weight: 700; }
+
+        /* Specific Gradients for Info Blocks */
+        #info-pollination { background: var(--gradient-blue); }
+        #info-honey { background: var(--gradient-pink); }
+        #info-vet { background: var(--gradient-cyan); color: #fff; }
+        #info-apc { background: var(--gradient-orange); color: #fff; }
+        #info-tourism { background: var(--gradient-purple); }
+        #info-standards { background: var(--gradient-soft); color: #2c3e50; }
+        #info-standards h3 { border-bottom-color: rgba(0,0,0,0.1); }
+
+        /* Auth Section */
+        .auth-section {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .importance-banner {
+            background-color: #fff;
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .registration-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            background: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: var(--secondary);
+        }
+
+        .tab-btn:first-child { border-radius: 10px 0 0 10px; }
+        .tab-btn:last-child { border-radius: 0 10px 10px 0; }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .form-container.active { display: block; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .checkbox-group { display: flex; gap: 15px; flex-wrap: wrap; }
+        .checkbox-item { display: flex; align-items: center; gap: 5px; }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover { background: #1a252f; }
+
+        /* Other Sections Styles (Simplified for brevity but kept functional) */
+        .section-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2em;
+            color: var(--secondary);
+            margin-bottom: 30px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .price-tag {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        footer {
+            background: var(--secondary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        footer a { color: var(--primary); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="logo">🐝 ApiNet <span>2.0</span></a>
+            <nav class="nav-links">
+                <a href="#marketplace">Опыление</a>
+                <a href="#honey">Мёд</a>
+                <a href="#vet-reports">Ветотчетность</a>
+                <a href="#apc">АПК</a>
+                <a href="#tourism-kbr">Туризм КБР</a>
+                <a href="#standards">Стандарты</a>
+                <a href="#auth" class="btn-login">Войти / Регистрация</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Цифровая Экосистема Пчеловодства</h1>
+        <p>Платформа для пчеловодов, фермеров и экотуристов. Автоматическое сопоставление спроса и предложения, контроль качества и развитие агротуризма в Кабардино-Балкарии.</p>
+        <div class="cta-buttons">
+            <a href="#auth" class="btn btn-primary">Зарегистрироваться</a>
+            <a href="#marketplace" class="btn btn-secondary">Найти опыление</a>
+        </div>
+    </section>
+
+    <!-- NEW: Navigation Menu with Links -->
+    <div class="nav-menu-section">
+        <h2>📋 Быстрая навигация по сервисам</h2>
+        <div class="quick-links">
+            <a href="#" class="nav-link-btn" data-section="pollination">🌸 Опыление</a>
+            <a href="#" class="nav-link-btn" data-section="honey">🍯 Мёд</a>
+            <a href="#" class="nav-link-btn" data-section="vet">📋 Ветотчетность</a>
+            <a href="#" class="nav-link-btn" data-section="apc">🚁 АПК</a>
+            <a href="#" class="nav-link-btn" data-section="tourism">🏔️ Туризм КБР</a>
+            <a href="#" class="nav-link-btn" data-section="standards">🏆 Стандарты</a>
+        </div>
+    </div>
+
+    <!-- Dynamic Info Blocks -->
+    <div id="info-pollination" class="info-block">
+        <h3>🌸 Опыление сельскохозяйственных культур</h3>
+        <p><strong>Кабардино-Балкарская Республика</strong> — это край плодородных земель и живописных полей! Наши аграрии выращивают тысячи гектаров подсолнечника, гречихи, рапса и плодовых садов. Но без пчёл-опылителей весь этот потенциал не раскрыть!</p>
+        <p>🐝 <strong>Знаете ли вы?</strong> Благодаря опылению пчёлами урожайность увеличивается в 2-3 раза, а качество плодов становится значительно выше. Пчёлы — это не просто производители мёда, это настоящие труженики сельского хозяйства!</p>
+        <p>💡 <strong>Мы предлагаем:</strong> Найти профессиональных пчеловодов КБР, которые доставят ульи прямо к вашим полям в нужное время. Автоматический подбор, контроль активности пчёл через датчики, гарантия качества опыления!</p>
+        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <strong>📊 Примеры эффективности:</strong><br>
+            • Подсолнечник: +30-50% урожайности<br>
+            • Сады (яблоня, груша): +40-60% завязей<br>
+            • Гречиха: увеличение сбора зерна до 35%<br>
+            • Рапс: повышение масличности на 25%
+        </div>
+    </div>
+
+    <div id="info-honey" class="info-block">
+        <h3>🍯 Натуральный мёд Кабардино-Балкарии</h3>
+        <p><strong>Наша республика</strong> — это уникальный край с богатейшей флорой! Высокогорные луга Приэльбрусья, цветущие сады Чегемского ущелья, липовые рощи и разнотравье предгорий — всё это создаёт идеальные условия для производства самого вкусного и полезного мёда.</p>
+        <p>🌿 <strong>Наши сорта:</strong> Акациевый прозрачный как горный ручей, гречишный тёмный и насыщенный, липовый ароматный и целебный, горный цветочный с букетом альпийских трав. Каждый сорт — это вкус природы КБР!</p>
+        <p>✅ <strong>Гарантия качества:</strong> Весь мёд на нашей платформе проходит строгий контроль, имеет цифровой паспорт качества и соответствует стандартам ApiNet 2.0. Покупайте только проверенный продукт от местных пчеловодов!</p>
+    </div>
+
+    <div id="info-vet" class="info-block">
+        <h3>📋 Ветеринарная отчетность для пасек</h3>
+        <p><strong>Кабардино-Балкария</strong> — регион с развитым пчеловодством, где здоровье пчёл находится под особым контролем. Правильная ветеринарная документация — это не просто формальность, это залог здоровья ваших пчёлосемей и безопасности продукции!</p>
+        <p>📝 <strong>Что мы предлагаем:</strong> Профессиональную подготовку всех необходимых документов: ветеринарный паспорт пасеки, журналы учёта работ, справки формы №4, отчёты о профилактических мероприятиях. Интеграция с ФГИС «Меркурий» для автоматической передачи данных.</p>
+        <p>🛡️ <strong>Преимущества:</strong> Экономия времени, соответствие всем требованиям Россельхознадзора, отсутствие штрафов, уверенность в законности вашей деятельности. Доверьте бюрократию профессионалам, а сами занимайтесь пчёлами!</p>
+    </div>
+
+    <div id="info-apc" class="info-block">
+        <h3>🚁 АПК технологии для современного пчеловодства</h3>
+        <p><strong>Кабардино-Балкарская Республика</strong> активно внедряет инновации в сельское хозяйство! Беспилотные летательные аппараты (дроны) — это будущее пчеловодства, которое уже стало настоящим. Горные ландшафты нашей республики идеально подходят для применения современных технологий мониторинга.</p>
+        <p>📡 <strong>APC Monitor:</strong> Дроны для автоматического облёта пасек, сбора данных с IoT-датчиков, контроля температуры и влажности ульев, мониторинга активности пчёл. Осматривайте сотни ульев за минуты без беспокойства пчёл!</p>
+        <p>🤖 <strong>AI-аналитика:</strong> Искусственный интеллект анализирует данные, предупреждает о проблемах, помогает оптимизировать работу пасеки. GPS-мониторинг кочёвок, облачное хранение данных, техподдержка 24/7. Современное пчеловодство — это эффективно и прибыльно!</p>
+    </div>
+
+    <div id="info-tourism" class="info-block">
+        <h3>🏔️ Туризм в Кабардино-Балкарии</h3>
+        <p><strong>Добро пожаловать в Кабардино-Балкарию</strong> — жемчужину Северного Кавказа! Наша республика — это величественный Эльбрус, кристально чистые Чегемские водопады, целебные термальные источники, таинственные Голубые озёра и древние аланские крепости.</p>
+        <p>🐝 <strong>Агротуризм на пасеках:</strong> Уникальная возможность попробовать настоящий горный мёд, понаблюдать за работой пчёл, научиться откачивать мёд, отдохнуть в апидоме (сон на ульях) с терапевтическим эффектом высокогорного воздуха. Экскурсии по кочевым пасекам, мастер-классы от опытных пчеловодов!</p>
+        <p>🌄 <strong>Активный отдых:</strong> Горнолыжные курорты Приэльбрусья, трекинг по живописным маршрутам, джип-туры в урочище Джилы-Су, дайвинг в Голубых озёрах, SPA-процедуры в термальных источниках. Кабардино-Балкария ждёт вас!</p>
+    </div>
+
+    <div id="info-standards" class="info-block">
+        <h3>🏆 Стандарты качества ApiNet 2.0</h3>
+        <p><strong>Кабардино-Балкарская Республика</strong> гордится своими пчеловодами и их продукцией! Чтобы сохранить эту репутацию и обеспечить потребителей только лучшим мёдом, мы разработали строгие стандарты качества ApiNet 2.0.</p>
+        <p>📋 <strong>Наши стандарты включают:</strong><br>
+        • Органолептические показатели (вкус, запах, консистенция)<br>
+        • Физико-химические параметры (влажность не более 20%, диастазное число, отсутствие оксиметилфурфурола)<br>
+        • Безопасность (отсутствие антибиотиков, пестицидов в пределах норм, контроль тяжёлых металлов)<br>
+        • Микробиологическую чистоту<br>
+        • Требования к упаковке и маркировке<br>
+        • Подтверждение ботанического происхождения через пыльцевой анализ</p>
+        <p>✅ <strong>Все производители</strong> на платформе ApiNet 2.0 обязаны соответствовать этим стандартам. Это гарантия того, что вы покупаете настоящий, качественный мёд от проверенных пчеловодов КБР!</p>
+    </div>
+
+    <!-- Registration Section -->
+    <section id="auth" class="auth-section">
+        <div class="auth-header">
+            <h3>Регистрация в системе</h3>
+            <p class="subtitle">Регистрация бесплатная! Выберите вашу роль для точного подбора услуг</p>
+            
+            <div class="importance-banner">
+                <h4 style="margin-top: 0; color: #2c3e50;">🌿 Пчеловодство — сердце сельского хозяйства Кабардино-Балкарии</h4>
+                <p style="font-size: 0.95em; line-height: 1.6; color: #555;">
+                    Мы живем в прекрасной республике, богатой уникальными медоносами и плодородными землями. 
+                    Пчеловодство играет ключевую роль в агропромышленном комплексе КБР: благодаря естественному опылению 
+                    урожайность многих культур возрастает в <strong>2–3 раза</strong>, а качество плодов значительно улучшается.
+                </p>
+                <ul style="font-size: 0.9em; color: #666; margin-bottom: 0;">
+                    <li><strong>Подсолнечник:</strong> увеличение урожайности до 30-50%.</li>
+                    <li><strong>Плодовые сады (яблоня, груша):</strong> рост завязей и улучшение товарного вида фруктов.</li>
+                    <li><strong>Гречиха и рапс:</strong> повышение сбора зерна и масличности.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="registration-tabs">
+            <button class="tab-btn active" onclick="openTab('beekeeper')">🐝 Пчеловод</button>
+            <button class="tab-btn" onclick="openTab('farmer')">🌾 Сельхозпроизводитель</button>
+            <button class="tab-btn" onclick="openTab('vet')">📋 Ветеринарная отчетность</button>
+        </div>
+
+        <!-- Beekeeper Form -->
+        <div id="beekeeper" class="form-container active">
+            <h3>Регистрация пчеловода</h3>
+            <form>
+                <div class="form-group">
+                    <label>ФИО / Название хозяйства</label>
+                    <input type="text" placeholder="Иванов И.И. или КПХ 'Медовое'" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="example@mail.ru" required>
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" placeholder="+7 (900) 000-00-00" required>
+                </div>
+                <div class="form-group">
+                    <label>Количество ульев</label>
+                    <input type="number" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Тип ульев</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox"> Дадановские</label>
+                        <label class="checkbox-item"><input type="checkbox"> Рамочные</label>
+                        <label class="checkbox-item"><input type="checkbox"> Лежаки</label>
+                        <label class="checkbox-item"><input type="checkbox"> Другие</label>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Создать аккаунт</button>
+            </form>
+        </div>
+
+        <!-- Farmer Form -->
+        <div id="farmer" class="form-container">
+            <h3>Регистрация сельхозпроизводителя</h3>
+            <form>
+                <div class="form-group">
+                    <label>Название хозяйства</label>
+                    <input type="text" placeholder="ООО 'Агро-КБР'" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Телефон</label>
+                    <input type="tel" required>
+                </div>
+                <div class="form-group">
+                    <label>Площадь под опыление (Га)</label>
+                    <input type="number" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label>Культура</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox"> Подсолнечник</label>
+                        <label class="checkbox-item"><input type="checkbox"> Гречиха</label>
+                        <label class="checkbox-item"><input type="checkbox"> Рапс</label>
+                        <label class="checkbox-item"><input type="checkbox"> Сады</label>
+                        <label class="checkbox-item"><input type="checkbox"> Другое</label>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn">Создать аккаунт</button>
+            </form>
+        </div>
+
+        <!-- Vet Report Form (Info) -->
+        <div id="vet" class="form-container">
+            <h3>Профессиональная подготовка отчетов</h3>
+            <p>Мы помогаем оформить все необходимые документы для соответствия ветеринарным требованиям.</p>
+            <ul style="list-style: none; padding: 0;">
+                <li>✅ Подготовка ветеринарного паспорта пасеки</li>
+                <li>✅ Оформление журналов учета работ</li>
+                <li>✅ Помощь в получении справок формы №4</li>
+            </ul>
+            <hr>
+            <h4>Заказать подготовку отчета</h4>
+            <form>
+                <div class="form-group">
+                    <label>1️⃣ Общие сведения о пасеке</label>
+                    <textarea rows="3" placeholder="Данные владельца, месторасположение, кол-во семей"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>2️⃣ Санитарно-ветеринарные условия</label>
+                    <textarea rows="3" placeholder="Расстояние между ульями, окраска, дезинфекция"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>3️⃣ Эпизоотическая обстановка</label>
+                    <textarea rows="2" placeholder="Обстановка в регионе, профилактика"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>4️⃣ Результаты диагностических исследований</label>
+                    <textarea rows="3" placeholder="Лаборатория, номер экспертизы, результаты"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>5️⃣ Лечебно-профилактические мероприятия</label>
+                    <textarea rows="3" placeholder="Препараты, дозировка, даты"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>6️⃣ Особые отметки</label>
+                    <textarea rows="2" placeholder="Дополнительные сведения"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Заказать подготовку отчета</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Marketplace Section -->
+    <section id="marketplace" class="section-container">
+        <h2 class="section-title">🌾 Биржа Опыления</h2>
+        <p style="text-align: center; margin-bottom: 30px;">Автоматический подбор пчелосемей под ваши поля. Данные с датчиков подтверждают активность.</p>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Найти пчеловода</h3>
+                <p class="price-tag">от 1 500 ₽/га</p>
+                <p>Разместите заявку на опыление ваших полей. Система подберет ближайшую пасеку с высоким рейтингом.</p>
+                <button class="submit-btn" style="background: var(--accent);">Найти пчеловода</button>
+            </div>
+            <div class="card">
+                <h3>Стать исполнителем</h3>
+                <p class="price-tag">Бесплатно</p>
+                <p>Разместите ваши ульи на карте. Получайте уведомления о заявках фермеров в вашем районе.</p>
+                <button class="submit-btn" style="background: var(--secondary);">Разместить предложение</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Honey Section -->
+    <section id="honey" class="section-container">
+        <h2 class="section-title">🍯 Реклама и Продажа Мёда</h2>
+        <p style="text-align: center; margin-bottom: 30px;">Размещайте объявления о вашем мёде. Покупатели видят цифровой паспорт качества.</p>
+        
+        <div class="form-container active" style="display: block; max-width: 800px;">
+            <form>
+                <div class="form-group">
+                    <label>Сорт мёда</label>
+                    <select>
+                        <option>Акациевый</option>
+                        <option>Гречишный</option>
+                        <option>Липовый</option>
+                        <option>Цветочный</option>
+                        <option>Горный</option>
+                        <option>Другой</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Цена за кг (₽)</label>
+                    <input type="number" placeholder="500">
+                </div>
+                <div class="form-group">
+                    <label>Описание / Регион</label>
+                    <textarea rows="3" placeholder="Мёд собран в Чегемском районе, высота 1200м..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Опубликовать объявление</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- APC Section -->
+    <section id="apc" class="section-container">
+        <h2 class="section-title">🚁 АПК для пчеловодства</h2>
+        <p style="text-align: center; margin-bottom: 30px;">Современные технологии мониторинга пасек. Используйте дроны для быстрого осмотра больших пасек без беспокойства пчел.</p>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <h3>📡 APC Monitor Pro</h3>
+                <ul>
+                    <li>Автоматический облет пасеки</li>
+                    <li>Сбор данных с IoT-датчиков</li>
+                    <li>Температура и влажность улья</li>
+                    <li>Активность пчел</li>
+                    <li>GPS-мониторинг</li>
+                </ul>
+                <button class="submit-btn">Заказать</button>
+            </div>
+            <div class="card">
+                <h3>📡 APC Monitor Basic</h3>
+                <ul>
+                    <li>Ручное управление</li>
+                    <li>Сбор базовых данных</li>
+                    <li>Видеонаблюдение</li>
+                    <li>До 100 ульев</li>
+                </ul>
+                <button class="submit-btn">Заказать</button>
+            </div>
+            <div class="card">
+                <h3>📡 APC Monitor Elite</h3>
+                <ul>
+                    <li>Полная автоматизация</li>
+                    <li>AI-аналитика</li>
+                    <li>До 500 ульев</li>
+                    <li>Облачное хранение</li>
+                    <li>Техподдержка 24/7</li>
+                </ul>
+                <button class="submit-btn">Заказать</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Standards Section -->
+    <section id="standards" class="section-container">
+        <h2 class="section-title">🏆 Стандарты качества мёда</h2>
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+            <h3>🏆 Стандарты качества ApiNet 2.0</h3>
+            <ol>
+                <li><strong>Органолептические показатели:</strong> Вкус сладкий, приятный; запах натуральный; консистенция от жидкой до кристаллизованной.</li>
+                <li><strong>Физико-химические показатели:</strong> Вода ≤ 20%; Диастазное число ≥ 7 ед. Готе; Оксиметилфурфурол ≤ 25 мг/кг.</li>
+                <li><strong>Безопасность продукции:</strong> Антибиотики не допускаются; Пестициды ≤ 0.01 мг/кг; Тяжелые металлы в норме.</li>
+                <li><strong>Микробиологические показатели:</strong> КМАФАнМ ≤ 1×10³ КОЕ/г; Дрожжи ≤ 100 КОЕ/г; Ботулотоксин отсутствует.</li>
+                <li><strong>Упаковка и маркировка:</strong> Пищевые материалы, герметичность. Наличие вет. свидетельства.</li>
+                <li><strong>Ботаническое происхождение:</strong> Пыльцевой анализ обязателен. Монофлёрный мёд ≥ 45% пыльцы.</li>
+                <li><strong>Условия хранения:</strong> t -6°C...+20°C, влажность ≤ 75%. Срок годности до 2 лет.</li>
+            </ol>
+            <p style="text-align: center; font-weight: bold; color: var(--accent); margin-top: 20px;">Все производители на платформе ApiNet 2.0 обязаны соответствовать данным стандартам!</p>
+        </div>
+    </section>
+
+    <!-- Tourism Section -->
+    <section id="tourism-kbr" class="section-container">
+        <h2 class="section-title">🏔️ Туризм в Кабардино-Балкарии</h2>
+        
+        <h3 style="color: var(--secondary); margin-top: 40px;">🐝 Эко- и Агротуризм на пасеках</h3>
+        <div class="cards-grid">
+            <div class="card">
+                <span style="background: var(--primary); padding: 5px 10px; border-radius: 5px; font-size: 0.8em; font-weight: bold;">ХИТ СЕЗОНА</span>
+                <h3>Приэльбрусье: Апидомик "Эльбрусский Бриз"</h3>
+                <p>Термальные источники + сон на ульях. Терапевтический эффект высокогорного воздуха.</p>
+                <p class="price-tag">от 2 500 ₽/час</p>
+                <p><strong>Экскурсоводы:</strong><br>👨‍🌾 Ахмед Казбеков (⭐ 4.9)<br>👩‍🌾 Фатима Алиева (⭐ 5.0)</p>
+                <button class="submit-btn">Забронировать</button>
+            </div>
+            <div class="card">
+                <h3>Чегемские водопады: Медовый маршрут</h3>
+                <p>Экскурсия на кочевую пасеку, мастер-класс по откачке, дегустация 7 сортов.</p>
+                <p class="price-tag">3 000 ₽ / чел</p>
+                <p><strong>Экскурсоводы:</strong><br>👩‍🌾 Зарема Кулиева (⭐ 4.9)<br>👨‍🌾 Казбек Шогенцуков (⭐ 5.0)</p>
+                <button class="submit-btn">Записаться</button>
+            </div>
+            <div class="card">
+                <h3>Нальчик: Агроферма "Долина Пчёл"</h3>
+                <p>Семейный отдых, кормление пчёл сахарным сиропом (безопасно), покупка сертифицированного мёда.</p>
+                <p class="price-tag">1 500 ₽ / чел</p>
+                <p><strong>Экскурсоводы:</strong><br>👨‍🌾 Асланбек Карданов (⭐ 4.8)<br>👩‍🌾 Мадина Темирканова (⭐ 4.9)</p>
+                <button class="submit-btn">Забронировать</button>
+            </div>
+        </div>
+
+        <h3 style="color: var(--secondary); margin-top: 40px;">🏔️ Общий туризм КБР</h3>
+        <div class="cards-grid">
+            <div class="card">
+                <h3>Гора Эльбрус</h3>
+                <p>Подъем на самую высокую вершину Европы. Канатные дороги, горнолыжные курорты.</p>
+                <p class="price-tag">от 5 000 ₽</p>
+                <p>🧗 Азамат Беккулов (Гид-альпинист ⭐ 5.0)</p>
+                <button class="submit-btn">Забронировать</button>
+            </div>
+            <div class="card">
+                <h3>Чегемские водопады</h3>
+                <p>Уникальный природный комплекс. Экскурсии, фототуры.</p>
+                <p class="price-tag">от 2 000 ₽</p>
+                <p>📷 Тимур Жангериев (Фотогид ⭐ 4.9)</p>
+                <button class="submit-btn">Забронировать</button>
+            </div>
+            <div class="card">
+                <h3>Термальные источники</h3>
+                <p>Целебные горячие источники Аушигера и Гедуко. Лечебно-оздоровительный отдых.</p>
+                <p class="price-tag">от 1 500 ₽</p>
+                <p>🧖 Мадина Аушева (SPA-консультант ⭐ 4.8)</p>
+                <button class="submit-btn">Забронировать</button>
+            </div>
+            <div class="card">
+                <h3>Голубые озера</h3>
+                <p>Три уникальных карстовых озера. Нижнее озеро - одно из глубочайших в мире.</p>
+                <p class="price-tag">от 1 800 ₽</p>
+                <p>🤿 Аслан Керефов (Инструктор ⭐ 5.0)</p>
+                <button class="submit-btn">Забронировать</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <h3>ApiNet 2.0</h3>
+        <p>© 2026 ApiNet Inc. Интеграция с ФГИС «Меркурий» активна. Регистрация в реестре ЛПХ КБР.</p>
+        <p>
+            <a href="mailto:info@apinet-kbr.ru">info@apinet-kbr.ru</a> | 
+            <a href="tel:88005553535">8 (800) 555-35-35</a>
+        </p>
+        <div style="margin-top: 20px;">
+            <a href="#">Тарифы</a> | 
+            <a href="#">API для разработчиков</a> | 
+            <a href="#">Карта медоносов КБР</a> | 
+            <a href="#">Поддержка</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Tab Switching Logic
+        function openTab(tabName) {
+            var i;
+            var x = document.getElementsByClassName("form-container");
+            var tabs = document.getElementsByClassName("tab-btn");
+            
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+                x[i].classList.remove("active");
+            }
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            document.getElementById(tabName).classList.add("active");
+            
+            // Find the button that was clicked and add active class (simple approach)
+            event.currentTarget.classList.add("active");
+        }
+
+        // Info Block Switching Logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link-btn');
+            const infoBlocks = document.querySelectorAll('.info-block');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Hide all blocks
+                    infoBlocks.forEach(block => {
+                        block.style.display = 'none';
+                    });
+                    
+                    // Show target block
+                    const section = this.getAttribute('data-section');
+                    const targetBlock = document.getElementById('info-' + section);
+                    if (targetBlock) {
+                        targetBlock.style.display = 'block';
+                        // Smooth scroll to block
+                        targetBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    
+                    // Visual feedback on button
+                    navLinks.forEach(l => l.style.transform = 'scale(1)');
+                    this.style.transform = 'scale(1.1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
